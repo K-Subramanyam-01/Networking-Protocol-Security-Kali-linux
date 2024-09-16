@@ -1,0 +1,115 @@
+Experiment: Configuring OSPF Routing Between Three Routers (Area 0)
+Objective:
+The goal of this experiment is to configure OSPF (Open Shortest Path First) dynamic routing on three routers to enable communication between two PCs located in different subnets. OSPF will be configured in Area 0, the backbone area.
+
+Network Setup:
+3 Routers: R1, R2, R3
+2 PCs:
+PC1 in Subnet 10.0.0.0/24
+PC2 in Subnet 13.0.0.0/24
+Subnet Allocation:
+Subnet 10.0.0.0/24: PC1 and Router R1 interface
+Subnet 11.0.0.0/24: Between Router R1 and Router R2
+Subnet 12.0.0.0/24: Between Router R2 and Router R3
+Subnet 13.0.0.0/24: PC2 and Router R3 interface
+Network Topology:
+scss
+      
+PC1 (10.0.0.1) ----> R1 ----> R2 ----> R3 ----> PC2 (13.0.0.1)
+        (10.0.0.254)   (11.0.0.1)   (12.0.0.2)       (13.0.0.254)
+Steps:
+1. Create the Network Topology:
+Place 3 routers and 2 PCs on the Cisco Packet Tracer workspace.
+Connect PC1 to R1 and PC2 to R3.
+Connect R1 to R2 and R2 to R3.
+2. Assign IP Addresses:
+On PC1, assign the IP address 10.0.0.1 / 24 and set the default gateway as 10.0.0.254.
+On PC2, assign the IP address 13.0.0.1 / 24 and set the default gateway as 13.0.0.254.
+Router R1:
+
+Interface to PC1 (FastEthernet0/0):
+perl
+      
+ip address 10.0.0.254 255.255.255.0
+no shutdown
+Interface to Router R2 (Serial0/0/0):
+perl
+      
+ip address 11.0.0.1 255.255.255.0
+no shutdown
+Router R2:
+
+Interface to Router R1 (Serial0/0/0):
+perl
+      
+ip address 11.0.0.2 255.255.255.0
+no shutdown
+Interface to Router R3 (Serial0/0/1):
+perl
+      
+ip address 12.0.0.1 255.255.255.0
+no shutdown
+Router R3:
+
+Interface to Router R2 (Serial0/0/1):
+perl
+      
+ip address 12.0.0.2 255.255.255.0
+no shutdown
+Interface to PC2 (FastEthernet0/0):
+perl
+      
+ip address 13.0.0.254 255.255.255.0
+no shutdown
+3. Configure OSPF Routing on the Routers:
+On Router R1:
+
+Enable OSPF and assign interfaces to Area 0:
+arduino
+      
+R1(config)# router ospf 1
+R1(config-router)# network 10.0.0.0 0.0.0.255 area 0
+R1(config-router)# network 11.0.0.0 0.0.0.255 area 0
+On Router R2:
+
+Enable OSPF and assign interfaces to Area 0:
+arduino
+      
+R2(config)# router ospf 1
+R2(config-router)# network 11.0.0.0 0.0.0.255 area 0
+R2(config-router)# network 12.0.0.0 0.0.0.255 area 0
+On Router R3:
+
+Enable OSPF and assign interfaces to Area 0:
+arduino
+      
+R3(config)# router ospf 1
+R3(config-router)# network 12.0.0.0 0.0.0.255 area 0
+R3(config-router)# network 13.0.0.0 0.0.0.255 area 0
+4. Verify OSPF Neighbors:
+To verify that the routers have formed OSPF adjacencies, use the following command on each router:
+sql
+      
+show ip ospf neighbor
+Ensure that all routers display each other as neighbors.
+5. Verify OSPF Routing Tables:
+On each router, use the following command to check that OSPF routes have been learned:
+sql
+      
+show ip route
+You should see OSPF routes (marked with O) for each subnet.
+6. Configure PCs for Default Gateway:
+On PC1, set the default gateway to 10.0.0.254.
+On PC2, set the default gateway to 13.0.0.254.
+7. Test Connectivity:
+Ping Test from PC1 to PC2:
+
+On PC1, open the command prompt and ping PC2 (13.0.0.1):
+      
+ping 13.0.0.1
+Ping Test from PC2 to PC1:
+
+On PC2, open the command prompt and ping PC1 (10.0.0.1):
+      
+ping 10.0.0.1
+8. Troubleshooting (if necessary):

@@ -1,0 +1,99 @@
+Experiment: Configuring Router-on-a-Stick (ROAS) with One Switch
+Objective:
+The goal of this experiment is to configure Router-on-a-Stick (ROAS) on a single router and switch to enable inter-VLAN communication between two PCs in different VLANs.
+
+Network Setup:
+1 Switch (VLAN-capable)
+1 Router (configured with subinterfaces for ROAS)
+2 PCs:
+PC1 (10.0.0.1) in VLAN 10
+PC2 (11.0.0.2) in VLAN 20
+
+Steps:
+1. Create the Network Topology:
+Place 1 switch, 1 router, and 2 PCs on the Cisco Packet Tracer workspace.
+Connect PC1 and PC2 to the switch.
+Connect the router to the switch using a GigabitEthernet or FastEthernet link.
+2. Assign IP Addresses:
+PC1 should have an IP address of 10.0.0.1 / 24.
+PC2 should have an IP address of 11.0.0.2 / 24.
+On each PC, go to the Desktop tab, use the IP Configuration tool, and assign the appropriate IP addresses.
+
+3. Configure VLANs on the Switch:
+Open the Switch CLI and enter privileged EXEC mode:
+
+shell
+  
+Switch> enable
+Switch# configure terminal
+Create VLAN 10 and VLAN 20:
+
+arduino
+  
+Switch(config)# vlan 10
+Switch(config-vlan)# name VLAN_10
+Switch(config-vlan)# exit
+
+Switch(config)# vlan 20
+Switch(config-vlan)# name VLAN_20
+Switch(config-vlan)# exit
+Assign PC1 (connected to FastEthernet0/1) to VLAN 10:
+
+arduino
+  
+Switch(config)# interface FastEthernet0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config-if)# exit
+Assign PC2 (connected to FastEthernet0/2) to VLAN 20:
+
+arduino
+  
+Switch(config)# interface FastEthernet0/2
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 20
+Switch(config-if)# exit
+Configure trunking between the switch and the router (assuming FastEthernet0/3 connects to the router):
+
+arduino
+  
+Switch(config)# interface FastEthernet0/3
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk encapsulation dot1q
+Switch(config-if)# switchport trunk allowed vlan 10,20
+Switch(config-if)# exit
+4. Configure Router-on-a-Stick on the Router:
+Open the Router CLI and enter privileged EXEC mode:
+
+shell
+  
+Router> enable
+Router# configure terminal
+On the router interface (assume GigabitEthernet0/0 is used to connect to the switch), configure subinterfaces for VLAN 10 and VLAN 20:
+
+For VLAN 10:
+
+arduino
+  
+Router(config)# interface GigabitEthernet0/0.10
+Router(config-subif)# encapsulation dot1Q 10
+Router(config-subif)# ip address 10.0.0.254 255.255.255.0
+Router(config-subif)# exit
+For VLAN 20:
+
+arduino
+  
+Router(config)# interface GigabitEthernet0/0.20
+Router(config-subif)# encapsulation dot1Q 20
+Router(config-subif)# ip address 11.0.0.254 255.255.255.0
+Router(config-subif)# exit
+Make sure the physical interface is enabled:
+
+arduino
+  
+Router(config)# interface GigabitEthernet0/0
+Router(config-if)# no shutdown
+Router(config-if)# exit
+5. Configure PCs for Default Gateway:
+On PC1, set the default gateway to 10.0.0.254 (VLAN 10 gateway).
+On PC2, set the default gateway to 11.0.0.254 (VLAN 20 gateway).
