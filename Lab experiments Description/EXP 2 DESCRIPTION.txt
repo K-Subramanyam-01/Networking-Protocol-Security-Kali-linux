@@ -1,0 +1,44 @@
+
+Experiment: Basic Switch Configuration Using Cisco Packet Tracer
+
+
+Objective:
+The aim of this experiment is to configure a basic switch using Cisco Packet Tracer, including setting up VLANs, configuring switch ports, and testing connectivity between devices. This will help in understanding the basic configuration commands required for a switch in a network.
+
+Equipment/Software:
+Cisco Packet Tracer (software)
+Devices: Cisco Switch, PCs
+Ethernet cables (virtual)
+Network Topology:
+One Cisco switch
+Two or more PCs connected to the switch
+Optional: Additional switches and routers for expanded testing
+Procedure:
+1. Setup the Network Topology:
+Place a switch and two PCs on the workspace.
+Connect each PC to the switch using Ethernet cables.
+2. Access the Switch CLI:
+Click on the switch to open its configuration window.
+Go to the CLI tab to start configuring the switch.
+3. Initial Switch Configuration:
+Enter privileged EXEC mode by typing:
+shell
+Copy code
+Switch> enable
+Enter global configuration mode:
+arduino
+Copy code
+Switch# configure terminal
+4. Configure Hostname:
+Change the switch's hostname to identify it in the network:
+arduino
+Copy code
+Switch(config)# hostname Switch1
+5. Configure Switch Ports:
+Assign each port connected to a PC into access mode:
+arduino
+Copy code
+Switch1(config)# interface FastEthernet0/1
+Switch1(config-if)# switchport mode access
+Switch1(config-if)# exit
+Repeat for all other ports that are connected to PCs.

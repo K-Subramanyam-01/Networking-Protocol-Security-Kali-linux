@@ -1,0 +1,107 @@
+Objective:
+The aim of this experiment is to configure VLANs on two switches, assign PCs to different VLANs, and configure trunk links to allow inter-switch communication of VLAN traffic.
+
+Network Setup:
+Switch 1 and Switch 2
+PC1 (10.0.0.1) and PC2 (10.0.0.2) are in VLAN 10.
+PC3 (10.0.0.3) and PC4 (10.0.0.3) are in VLAN 20.
+Trunk link between Switch 1 and Switch 2 to carry VLAN 10 and VLAN 20 traffic.
+
+Steps:
+1. Create the Network Topology:
+Place two switches and four PCs on the Cisco Packet Tracer workspace.
+Connect PC1 and PC2 to Switch 1, and PC3 and PC4 to Switch 2.
+Connect Switch 1 and Switch 2 using a crossover cable or any link (GigabitEthernet/FastEthernet).
+2. Assign IP Addresses:
+Click on each PC, go to the Desktop tab, and use the IP Configuration tool to assign the following IP addresses:
+PC1: 10.0.0.1 / 255.255.255.0
+PC2: 10.0.0.2 / 255.255.255.0
+PC3: 10.0.0.3 / 255.255.255.0
+PC4: 10.0.0.3 / 255.255.255.0
+3. Configure VLANs on Switch 1:
+Open Switch 1 CLI and enter privileged EXEC mode:
+
+shell
+Copy code
+Switch1> enable
+Switch1# configure terminal
+Create VLAN 10 and VLAN 20:
+
+arduino
+Copy code
+Switch1(config)# vlan 10
+Switch1(config-vlan)# name VLAN_10
+Switch1(config-vlan)# exit
+
+Switch1(config)# vlan 20
+Switch1(config-vlan)# name VLAN_20
+Switch1(config-vlan)# exit
+Assign PC1 (connected to port FastEthernet0/1) and PC2 (connected to FastEthernet0/2) to VLAN 10:
+
+scss
+Copy code
+Switch1(config)# interface FastEthernet0/1
+Switch1(config-if)# switchport mode access
+Switch1(config-if)# switchport access vlan 10
+Switch1(config-if)# exit
+
+Switch1(config)# interface FastEthernet0/2
+Switch1(config-if)# switchport mode access
+Switch1(config-if)# switchport access vlan 10
+Switch1(config-if)# exit
+Set the trunk port on Switch 1 (assuming port FastEthernet0/3 is used to connect to Switch 2):
+
+arduino
+Copy code
+Switch1(config)# interface FastEthernet0/3
+Switch1(config-if)# switchport mode trunk
+Switch1(config-if)# switchport trunk allowed vlan 10,20
+Switch1(config-if)# exit
+4. Configure VLANs on Switch 2:
+Open Switch 2 CLI and enter privileged EXEC mode:
+
+shell
+Copy code
+Switch2> enable
+Switch2# configure terminal
+Create VLAN 10 and VLAN 20:
+
+arduino
+Copy code
+Switch2(config)# vlan 10
+Switch2(config-vlan)# name VLAN_10
+Switch2(config-vlan)# exit
+
+Switch2(config)# vlan 20
+Switch2(config-vlan)# name VLAN_20
+Switch2(config-vlan)# exit
+Assign PC3 (connected to port FastEthernet0/1) and PC4 (connected to FastEthernet0/2) to VLAN 20:
+
+scss
+Copy code
+Switch2(config)# interface FastEthernet0/1
+Switch2(config-if)# switchport mode access
+Switch2(config-if)# switchport access vlan 20
+Switch2(config-if)# exit
+
+Switch2(config)# interface FastEthernet0/2
+Switch2(config-if)# switchport mode access
+Switch2(config-if)# switchport access vlan 20
+Switch2(config-if)# exit
+Set the trunk port on Switch 2 (assuming port FastEthernet0/3 is used to connect to Switch 1):
+
+arduino
+Copy code
+Switch2(config)# interface FastEthernet0/3
+Switch2(config-if)# switchport mode trunk
+Switch2(config-if)# switchport trunk allowed vlan 10,20
+Switch2(config-if)# exit
+5. Verify Configuration:
+On Switch 1 and Switch 2, verify VLANs are configured:
+arduino
+Copy code
+Switch# show vlan brief
+Check the trunk ports on both switches:
+arduino
+Copy code
+Switch# show interfaces trunk
