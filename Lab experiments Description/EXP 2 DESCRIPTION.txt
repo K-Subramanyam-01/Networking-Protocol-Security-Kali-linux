@@ -23,21 +23,16 @@ Go to the CLI tab to start configuring the switch.
 3. Initial Switch Configuration:
 Enter privileged EXEC mode by typing:
 shell
-Copy code
 Switch> enable
 Enter global configuration mode:
 arduino
-Copy code
 Switch# configure terminal
 4. Configure Hostname:
 Change the switch's hostname to identify it in the network:
 arduino
-Copy code
 Switch(config)# hostname Switch1
 5. Configure Switch Ports:
 Assign each port connected to a PC into access mode:
-arduino
-Copy code
 Switch1(config)# interface FastEthernet0/1
 Switch1(config-if)# switchport mode access
 Switch1(config-if)# exit
