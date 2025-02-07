@@ -9,7 +9,7 @@ def connect_to_server():
     while True:
         try:
             s = socket.socket()
-            host = "10.250.14.55"
+            host = "192.168.1.5"
             port = 8080
             s.connect((host, port))
             print("Connected to server")

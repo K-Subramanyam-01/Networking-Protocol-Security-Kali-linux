@@ -7,7 +7,7 @@ import platform
 
 def start_server():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = "10.250.14.55"
+    host = "192.168.1.5"
     port = 8080
     
     try:
